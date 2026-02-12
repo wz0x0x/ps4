@@ -86,13 +86,86 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       height: 300px;
       overflow-y: auto;
     }
+    /* تأثير النص المضيء */
+.neon-text {
+    color: white !important;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff;
+    font-weight: bold;
+}
+
+/* الساعة والتاريخ */
+#clock-container {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    text-align: right;
+}
+
+/* اسمك تحت (العقيلي) */
+#my-name {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 24px;
+}
+
+/* شريط العداد المتطور */
+#progress-wrapper {
+    position: absolute;
+    bottom: 80px;
+    width: 60%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+}
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #fff, #e0e0e0);
+    box-shadow: 0 0 15px #fff;
+    transition: width 0.3s ease;
+}
   </style>
 </head>
 <body>
+  <div id="clock-container" class="neon-text">
+    <div id="clock">00:00:00</div>
+    <div id="date">Date</div>
+</div>
+
+<div id="progress-wrapper">
+    <div id="progress-bar"></div>
+</div>
+
+<div id="my-name" class="neon-text">العقيلي</div>
   <script>
     if (window.applicationCache.status === 0) {
       window.location.replace("cache.html");
     }
+    // تشغيل الساعة والتاريخ
+function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').innerText = now.toLocaleTimeString();
+    document.getElementById('date').innerText = now.toLocaleDateString();
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// وظيفة لتحديث العداد (استدعيها داخل كود الثغرة)
+function setProgress(percent) {
+    document.getElementById('progress-bar').style.width = percent + '%';
+}
+
+// نظام تنبيهات مبسط (يظهر ويختفي)
+function showNotify(msg) {
+    const notify = document.createElement('div');
+    notify.className = 'neon-text';
+    notify.style = "position:fixed; top:20px; left:20px; background:rgba(0,0,0,0.5); padding:10px; border-radius:5px;";
+    notify.innerText = msg;
+    document.body.appendChild(notify);
+    setTimeout(() => notify.remove(), 3000);
+}
   </script>
 
   <div class="card">
