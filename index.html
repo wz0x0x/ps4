@@ -23,23 +23,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <meta charset="UTF-8">
   <title>PSFree - Lapse Exploit for 9.00</title>
   <style>
-  body {
-    background-color: black !important; /* لون احتياطي في حال تأخر تحميل الصورة */
-    
-    /* جرب كتابة المسار بهذا الشكل لضمان وصول المتصفح للملف */
-    background-image: url('./as.png?v=2') !important; 
-    
-    /* أوامر الأبعاد المثالية */
-    background-size: 100% 100% !important; 
-    background-position: center center !important;
-    background-repeat: no-repeat !important;
-    background-attachment: fixed !important;
-    
+ body {
+    /* سطر واحد يضبط الخلفية والأبعاد */
+    background: #000 url('as.png?v=3') no-repeat center center fixed;
+    background-size: 100% 100% !important; /* لملء كامل الشاشة */
     height: 100vh;
-    width: 100vw;
     margin: 0;
-    padding: 0;
     overflow: hidden;
+}
+
+/* تنظيف المربع الأسود وجعله شفافاً تماماً */
+#log, #msgs, .container, [style*="backdrop-filter"] {
+    background: rgba(0, 0, 0, 0) !important; /* شفافية 100% */
+    backdrop-filter: none !important;        /* حذف التشويش */
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    position: fixed !important;
+    bottom: 5% !important; /* نقله للأسفل عشان ما يغطي اسمك */
 }
      .container, #log, #msgs 
             background: rgba(0, 0, 0, 0) !important; /* شفاف تماماً */
