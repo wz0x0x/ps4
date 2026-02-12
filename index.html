@@ -23,23 +23,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <meta charset="UTF-8">
   <title>PSFree - Lapse Exploit for 9.00</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
    body {
-    /* وضعنا لون احتياطي ثم الصورة مباشرة */
-    background: #063FAB url('as.png?v=1') no-repeat center center fixed;
-    background-size: cover;
-    color: white;
-    font-family: Arial, sans-serif;
+    /* جعل الخلفية سوداء احتياطاً */
+    background-color: black; 
+    
+    /* استدعاء الصورة */
+    background-image: url('as.png?v=1');
+    
+    /* الأوامر الذهبية لضبط الأبعاد */
+    background-size: 100% 100% !important; /* هذا الأمر يجبر الصورة على التمدد لتملأ الشاشة طولاً وعرضاً */
+    background-attachment: fixed;          /* تثبيت الصورة منعاً للاهتزاز */
+    background-position: center center;    /* توسيط الصورة بدقة */
+    background-repeat: no-repeat;          /* منع تكرار الصورة */
+    
+    /* ضبط حجم الصفحة */
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;  
-      }
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* منع ظهور أشرطة التمرير المزعجة */
+}
      .container, #log, #msgs 
             background: rgba(0, 0, 0, 0) !important; /* شفاف تماماً */
             backdrop-filter: none !important;        /* حذف التشويش */
