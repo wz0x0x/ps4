@@ -42,7 +42,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             z-index: 9999;
         }
 
-        /* المربع الشفاف الأنيق للعداد */
         .loader-box {
             position: fixed;
             top: 45%;
@@ -73,7 +72,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             opacity: 0.8;
         }
 
-        /* إخفاء إجباري لأي نصوص مبعثرة */
+        /* إخفاء إجباري لأي نصوص مبعثرة تظهر في الصور */
         #log, .msgs, #messages, [id*="log"], [class*="msg"], div:not(.footer-bar):not(.exploit-title):not(.loader-box):not(#percentage):not(.loader-text) { 
             display: none !important;
             visibility: hidden !important;
@@ -81,7 +80,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             position: absolute !important;
         }
 
-        /* الشريط السفلي بتوزيعه الثلاثي */
         .footer-bar {
             position: fixed !important;
             bottom: 0 !important;
@@ -110,28 +108,30 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <div class="loader-box" id="main-box">
     <div id="percentage">0%</div>
-    <div class="loader-text">INITIALIZING...</div>
+    <div class="loader-text">INITIALIZING SYSTEM...</div>
 </div>
 
 <div class="footer-bar">
     <table class="footer-table">
         <tr>
             <td class="td-left">DATE: <span id="live-date"></span></td>
-            <td class="td-center">● SYSTEM READY (OFFLINE MODE)</td>
+            <td class="td-center">● SYSTEM READY (OFFLINE)</td>
             <td class="td-right">TIME: <span id="live-clock"></span></td>
         </tr>
     </table>
 </div>
 
 <script>
-    // ربط عملية الأوفلاين بناءً على منطق cache.html الخاص بك
-    if (localStorage.getItem("isCached") === "true") {
-        document.querySelector(".loader-text").innerText = "OFFLINE MODE ACTIVE";
-    } else {
-        // إذا لم يكن مخزناً، نوجهه لصفحة الكاش التي أرسلت صورتها
-        window.location.replace("cache.html");
-        localStorage.setItem("isCached", "true");
+    // نظام ذكي للتحقق من الأوفلاين بناءً على ملفاتك
+    function checkCache() {
+        if (!window.applicationCache) return;
+        
+        // إذا كان المتصفح غير مخزن للملفات، نرسله لصفحة cache.html
+        if (window.applicationCache.status === window.applicationCache.UNCACHED) {
+            window.location.replace("cache.html");
+        }
     }
+    checkCache();
 
     function updateClock() {
         var d = new Date();
@@ -141,7 +141,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     }
     updateClock();
 
-    // عداد الـ % (وهمي لغرض الشكل الجمالي وتأكيد التحميل)
+    // العداد التجميلي
     var count = 0;
     var progress = setInterval(function(){
         count++;
@@ -156,7 +156,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 setTimeout(function(){ document.getElementById("main-box").style.display = "none"; }, 1000);
             }, 1500);
         }
-    }, 80);
+    }, 50);
 
     window.alert = function() { return true; };
 </script>
