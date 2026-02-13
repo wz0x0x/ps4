@@ -81,12 +81,48 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     }
 
     /* تنظيف مربع التنبيهات الأصلي وجعله شفافاً */
-    #msgs, #log, .container {
-        background: transparent !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        border: none !important;
-        box-shadow: none !important;
+    #msgs, #log, .container {/* تنسيق مربع Log الجديد (رسائل الثغرة) */
+#log {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    max-width: 400px;
+    min-height: 100px; /* لضمان ظهور الوهج حتى لو كان فارغاً */
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.4) !important; /* شفافية خفيفة للخلفية */
+    border-radius: 15px;
+    backdrop-filter: blur(2px) !important; /* تشويش خفيف جداً للخلفية */
+    -webkit-backdrop-filter: blur(2px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(255, 255, 255, 0.5); /* الوهج المضيء */
+    color: #fff !important; /* لون النص أبيض */
+    font-family: 'Courier New', monospace; /* خط يشبه الأكواد */
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-y: auto; /* إذا كثرت الأكواد تظهر سكرول */
+    max-height: 70%; /* لا يغطي الشاشة بالكامل */
+    opacity: 1;
+    transition: opacity 1s ease-out, transform 1s ease-out; /* حركة اختفاء ناعمة */
+    z-index: 1000;
+}
+
+/* لتأكيد إزالة الخلفية من أي عناصر داخل الـ Log */
+#log * {
+    background: transparent !important;
+}
+
+/* تنسيق الرسائل الفردية داخل الـ Log */
+#log div {
+    margin-bottom: 5px;
+    word-break: break-all; /* لكسر الكلمات الطويلة */
+}
+
+/* إخفاء الـ Log عند انتهاء الثغرة (سنضيفها لاحقاً بالـ JS) */
+.log-hidden {
+    opacity: 0 !important;
+    transform: translateY(100px); /* ينزل لتحت ويختفي */
+    pointer-events: none; /* لمنع التفاعل معه بعد الاختفاء */
+}
     }
 </style>
   <script>
