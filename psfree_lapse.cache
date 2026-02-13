@@ -1,6 +1,7 @@
 CACHE MANIFEST 
 # v3.0.0 Self-Host 
 
+00.png
 COPYING
 LICENSE
 README.md
@@ -13,7 +14,6 @@ lapse.mjs
 payload.bin
 payload.js
 psfree.mjs
-qq.png
 send.mjs
 fonts\FONTS.LICENSE
 fonts\LiberationMono-Regular.ttf
