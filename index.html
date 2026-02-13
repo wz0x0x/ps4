@@ -22,44 +22,44 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 <head>
 <meta charset="UTF-8">
 <style>
-    /* إعدادات الخلفية الأصلية */
+    /* إعدادات الخلفية */
     body {
         background: #000 url('qq.png') no-repeat center center fixed !important;
         background-size: 100% 100% !important;
         margin: 0; padding: 0; overflow: hidden; height: 100vh;
-        font-family: 'Courier New', monospace;
+        font-family: monospace;
     }
 
-    /* العنوان الأخضر المضيء - فوق الصندوق مباشرة */
+    /* العنوان العلوي المضيء */
     .exploit-title {
         position: fixed !important;
-        top: 15% !important;
+        top: 8% !important;
         left: 0; width: 100%;
         text-align: center !important;
         color: #00ff41 !important;
-        font-size: 20px !important;
-        font-weight: bold !important;
-        text-shadow: 0 0 15px #00ff41;
+        font-size: 18px !important;
+        font-weight: bold;
+        text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
         z-index: 9999;
     }
 
-    /* الصندوق الشفاف - تم تعديله ليجذب أي كود خارجي */
-    #log, .msgs, #messages, #msgs, .log, [id*="log"], [class*="msg"] { 
+    /* الصندوق الشفاف الصغير للأوامر */
+    #log, .msgs, #messages, [id*="log"] { 
         position: fixed !important;
-        top: 25% !important;
+        top: 20% !important;
         left: 20% !important;
         width: 60% !important;
-        height: 40% !important;
-        background: rgba(0, 0, 0, 0.6) !important;
-        border: 1px solid #00ff41 !important;
+        height: 45% !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        border: 1px solid rgba(0, 255, 65, 0.4) !important;
         border-radius: 12px !important;
-        padding: 15px !important;
+        padding: 12px !important;
         overflow-y: auto !important;
-        color: #00ff41 !important; /* إجبار اللون الأخضر داخل الصندوق */
-        font-size: 14px !important;
+        color: #00ff41 !important;
+        font-size: 12px !important;
         z-index: 9998 !important;
-        box-shadow: 0 0 20px rgba(0, 255, 65, 0.2) !important;
         text-align: left !important;
+        box-shadow: 0 0 15px rgba(0, 255, 65, 0.1) !important;
     }
 
     /* الشريط السفلي */
@@ -68,82 +68,73 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         bottom: 0 !important;
         left: 0; width: 100%;
         height: 50px !important;
-        background: rgba(0, 0, 0, 0.8) !important;
+        background: rgba(0, 0, 0, 0.85) !important;
         border-top: 1px solid #00ff41 !important;
         z-index: 10000 !important;
-        display: flex;
-        align-items: center;
-        padding-left: 20px;
     }
 
-    /* التاريخ والوقت معاً في الشريط السفلي يسار */
-    .info-container {
-        color: #fff;
+    /* تنسيق الجدول لمنع الالتصاق */
+    .footer-table {
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+        color: white;
+    }
+
+    .footer-table td {
+        padding: 0 20px;
         font-size: 14px;
-        display: flex;
-        gap: 20px; /* مسافة بين الوقت والتاريخ */
+        vertical-align: middle;
     }
 
-    #live-clock, #live-date {
-        color: #fff !important;
-        text-shadow: none !important;
-    }
-
-    /* إخفاء أي عنصر يحاول الخروج من الصندوق (إجبار) */
-    body > div:not(.footer-bar):not(.exploit-title):not(#log) {
+    /* تنسيق SYSTEM READY المضيء */
+    .system-ready {
         color: #00ff41 !important;
+        font-weight: bold;
+        text-shadow: 0 0 8px #00ff41;
+        margin-left: 15px;
+        letter-spacing: 1px;
     }
+
+    .time-val { color: #fff; font-weight: bold; }
 </style>
 </head>
 <body>
 
 <div class="exploit-title">العقيلي - LAPSE EXPLOIT FOR FIRMWARE 9.00</div>
 
-<div id="log"></div>
+<div id="log">
+    > Initializing System...
+</div>
 
 <div class="footer-bar">
-    <div class="info-container">
-        <span id="live-date"></span>
-        <span id="live-clock">00:00:00</span>
-    </div>
+    <table class="footer-table">
+        <tr>
+            <td style="width: 180px;">DATE: <span id="live-date"></span></td>
+            <td>
+                TIME: <span id="live-clock" class="time-val">00:00:00</span>
+                <span class="system-ready">● SYSTEM READY</span>
+            </td>
+        </tr>
+    </table>
 </div>
 
 <script>
-    function update() {
+    // تحديث الوقت والتاريخ
+    function updateClock() {
         var d = new Date();
         var h = String(d.getHours()).padStart(2, '0');
         var m = String(d.getMinutes()).padStart(2, '0');
         var s = String(d.getSeconds()).padStart(2, '0');
-        document.getElementById("live-clock").innerText = h + ":" + m + ":" + s;
-        document.getElementById("live-date").innerText = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
-        setTimeout(update, 1000);
-    }
-    update();
-
-    // وظيفة إضافية لإجبار الأكواد المبعثرة على الدخول للصندوق
-    window.onload = function() {
-        var logBox = document.getElementById('log');
-        // إذا وجدنا أي ديف (div) غريب يحتوي على نصوص الثغرة، سننقله فوراً للصندوق
-        setInterval(function() {
-            var divs = document.querySelectorAll('div');
-            divs.forEach(function(div) {
-                if (div.innerText.includes('payload') || div.innerText.includes('loading')) {
-                   if (div.id !== 'log' && div.className !== 'footer-bar') {
-                       logBox.appendChild(div);
-                   }
-                }
-            });
-        }, 500);
-    };
+        document.getElementById
 </script>
     
   <div class="card">
-    <h1>PSFree - Lapse Exploit for Firmware 9.00</h1>
+    <h1>العقيلي - Lapse Exploit for Firmware 9.00</h1>
     <pre id="console"></pre>
   </div>
 
   <script src="payload.js"></script>
   <script type="module" src="./alert.mjs"></script>
 </body>
-</html>
 </html>
