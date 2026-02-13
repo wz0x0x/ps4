@@ -1,19 +1,19 @@
 CACHE MANIFEST 
-# v2.5.5 Self-Host 
+# v3.0.0 Self-Host 
 
+COPYING
+LICENSE
+README.md
 about.html
 alert.mjs
 cache.html
 config.mjs
-COPYING
-qq.png
 index.html
 lapse.mjs
-LICENSE
 payload.bin
 payload.js
 psfree.mjs
-README.md
+qq.png
 send.mjs
 fonts\FONTS.LICENSE
 fonts\LiberationMono-Regular.ttf
