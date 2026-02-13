@@ -18,96 +18,111 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <!DOCTYPE html>
-<html lang="en" manifest="psfree_lapse.cache">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        /* إعدادات الخلفية ومنع التكرار */
-        body {
-            background: #000 url('qq.png') no-repeat center center fixed !important;
-            background-size: 100% 100% !important;
-            margin: 0; padding: 0; overflow: hidden; height: 100vh;
-            font-family: monospace;
-        }
+  <meta charset="UTF-8">
+  <title>العقيلي - Lapse Exploit 9.00</title>
+  <style>
+    /* إعدادات الخلفية ومنع التكرار */
+    body {
+      background: #000 url('qq.png') no-repeat center center fixed !important;
+      background-size: cover !important; /* لضمان ملء الشاشة بدون تكرار */
+      margin: 0; padding: 0; overflow: hidden; height: 100vh;
+      font-family: Arial, sans-serif;
+    }
 
-        /* إخفاء إجباري لأي كود أسود أو أخضر يخرج من السكربت */
-        #log, .msgs, #messages, [id*="log"], [class*="msg"], div[style*="position: absolute"] { 
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-        }
+    /* إخفاء إجباري للكونسول والأكواد السوداء المزعجة */
+    #console, #log, .msgs, [id*="log"], div.card { 
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      position: absolute !important;
+    }
 
-        .exploit-title {
-            position: fixed !important; top: 8%; left: 0; width: 100%;
-            text-align: center; color: #00ff41; font-size: 18px;
-            font-weight: bold; text-shadow: 0 0 10px #00ff41; z-index: 9999;
-        }
+    .exploit-title {
+      position: fixed !important; top: 8%; left: 0; width: 100%;
+      text-align: center; color: #00ff41; font-size: 22px;
+      font-weight: bold; text-shadow: 0 0 10px #00ff41; z-index: 9999;
+    }
 
-        /* المربع الشفاف للعداد */
-        .loader-box {
-            position: fixed; top: 45%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px; padding: 30px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(0, 255, 65, 0.3);
-            border-radius: 20px; text-align: center; z-index: 9998;
-        }
+    /* المربع الشفاف للعداد */
+    .loader-box {
+      position: fixed; top: 45%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px; padding: 35px;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(0, 255, 65, 0.3);
+      border-radius: 25px; text-align: center; z-index: 9998;
+      backdrop-filter: blur(5px);
+    }
 
-        #percentage { font-size: 50px; color: #00ff41; font-weight: bold; }
+    #percentage { font-size: 55px; color: #00ff41; font-weight: bold; text-shadow: 0 0 15px #00ff41; }
 
-        .footer-bar {
-            position: fixed !important; bottom: 0; left: 0; width: 100%;
-            height: 50px; background: rgba(0, 0, 0, 0.85);
-            border-top: 1px solid #00ff41; z-index: 10000;
-        }
+    /* الشريط السفلي الاحترافي */
+    .footer-bar {
+      position: fixed !important; bottom: 0; left: 0; width: 100%;
+      height: 55px; background: rgba(0, 0, 0, 0.85);
+      border-top: 1px solid #00ff41; z-index: 10000;
+    }
 
-        .footer-table { width: 100%; height: 100%; table-layout: fixed; color: white; }
-        .td-center { text-align: center; color: #00ff41; font-weight: bold; text-shadow: 0 0 8px #00ff41; }
-    </style>
+    .footer-table { width: 100%; height: 100%; table-layout: fixed; color: white; }
+    .td-center { text-align: center; color: #00ff41; font-weight: bold; text-shadow: 0 0 8px #00ff41; }
+  </style>
 </head>
 <body>
-    <div class="exploit-title">العقيلي - LAPSE EXPLOIT FOR FIRMWARE 9.00</div>
+  <script>
+    // الكود المسؤول عن تحويل المستخدم لصفحة الكاش في حال عدم التخزين
+    if (window.applicationCache.status === 0) {
+      window.location.replace("cache.html");
+    }
+  </script>
 
-    <div class="loader-box" id="main-box">
-        <div id="percentage">0%</div>
-        <div id="loader-status" style="color:white; font-size:13px; margin-top:10px;">SYSTEM READY</div>
-    </div>
+  <div class="exploit-title">العقيلي - LAPSE EXPLOIT FOR FIRMWARE 9.00</div>
 
-    <div class="footer-bar">
-        <table class="footer-table">
-            <tr>
-                <td style="text-align:left; padding-left:20px;">DATE: <span id="live-date"></span></td>
-                <td class="td-center">● OFFLINE MODE ACTIVE</td>
-                <td style="text-align:right; padding-right:20px;">TIME: <span id="live-clock"></span></td>
-            </tr>
-        </table>
-    </div>
+  <div class="loader-box" id="main-box">
+    <div id="percentage">0%</div>
+    <div id="loader-status" style="color:white; font-size:14px; margin-top:12px; letter-spacing: 1px;">INITIALIZING EXPLOIT...</div>
+  </div>
 
-    <script>
-        // تحديث الوقت
-        function updateClock() {
-            var d = new Date();
-            document.getElementById("live-clock").innerText = d.toLocaleTimeString('en-GB');
-            document.getElementById("live-date").innerText = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
-            setTimeout(updateClock, 1000);
-        }
-        updateClock();
+  <div class="footer-bar">
+    <table class="footer-table">
+      <tr>
+        <td style="text-align:left; padding-left:25px; font-size: 14px;">DATE: <span id="live-date"></span></td>
+        <td class="td-center">● SYSTEM READY (OFFLINE MODE)</td>
+        <td style="text-align:right; padding-right:25px; font-size: 14px;">TIME: <span id="live-clock"></span></td>
+      </tr>
+    </table>
+  </div>
 
-        // العداد
-        var count = 0;
-        var progress = setInterval(function(){
-            count++;
-            document.getElementById("percentage").innerText = count + "%";
-            if(count == 100) {
-                clearInterval(progress);
-                document.getElementById("loader-status").innerText = "EXPLOIT LOADED!";
-                setTimeout(function(){ document.getElementById("main-box").style.display = "none"; }, 1500);
-            }
-        }, 60);
+  <script>
+    // تحديث الساعة والتاريخ
+    function updateClock() {
+      var d = new Date();
+      document.getElementById("live-clock").innerText = d.toLocaleTimeString('en-GB');
+      document.getElementById("live-date").innerText = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
+      setTimeout(updateClock, 1000);
+    }
+    updateClock();
 
-        // منع أي رسائل خطأ توقف الهوست
-        window.onerror = function() { return true; };
-        window.onunhandledrejection = function() { return true; };
+    // عداد مئوي وهمي لضمان الشكل الجمالي وتأكيد التحميل
+    var count = 0;
+    var progress = setInterval(function(){
+      count++;
+      document.getElementById("percentage").innerText = count + "%";
+      if(count == 100) {
+        clearInterval(progress);
+        document.getElementById("loader-status").innerText = "SUCCESS: EXPLOIT LOADED!";
+        document.getElementById("loader-status").style.color = "#00ff41";
+        setTimeout(function(){ 
+          document.getElementById("main-box").style.transition = "opacity 1s";
+          document.getElementById("main-box").style.opacity = "0";
+          setTimeout(function(){ document.getElementById("main-box").style.display = "none"; }, 1000);
+        }, 2000);
+      }
+    }, 70);
+
+    // منع رسائل الخطأ من الظهور فوق الواجهة
+    window.onerror = function() { return true; };
 </script>
     
   <div class="card">
