@@ -23,122 +23,72 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <meta charset="UTF-8">
   <title>PSFree - Lapse Exploit for 9.00</title>
   <style>
- body {
-    /* سطر واحد يضبط الخلفية والأبعاد */
-    background: #000 url('aw.png?v=5') no-repeat center center fixed;
-    background-size: 100% 100% !important; /* لملء كامل الشاشة */
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-}
-
-/* تنظيف المربع الأسود وجعله شفافاً تماماً */
-#log, #msgs, .container, [style*="backdrop-filter"] {
-    background: rgba(0, 0, 0, 0) !important; /* شفافية 100% */
-    backdrop-filter: none !important;        /* حذف التشويش */
-    -webkit-backdrop-filter: none !important;
-    border: none !important;
-    position: fixed !important;
-    bottom: 5% !important; /* نقله للأسفل عشان ما يغطي اسمك */
-}
-     .container, #log, #msgs 
-            background: rgba(0, 0, 0, 0) !important; /* شفاف تماماً */
-            backdrop-filter: none !important;        /* حذف التشويش */
-            -webkit-backdrop-filter: none !important;
-            
-            position: absolute !important;
-            bottom: 10px;    /* نزله لأسفل الشاشة */
-            left: 10px;      /* خليه في الزاوية يسار */
-            
-            border: none !important; /* حذف الإطار */
-            box-shadow: none !important; /* حذف أي ظل */
-}
-
-    @font-face {
-      font-family: 'logging';
-      src: url('fonts/LiberationMono-Regular.ttf');
+    body {
+        /* إعدادات الخلفية والصورة الجديدة */
+        background: #000 url('aw.png?v=5') no-repeat center center fixed !important;
+        background-size: 100% 100% !important;
+        color: white;
+        font-family: Arial, sans-serif;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
-    .card {
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      width: 90%;
-      max-width: 700px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    /* تأثير الأبيض المضيء */
+    .neon-text {
+        color: white !important;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff;
+        font-weight: bold;
     }
 
-    h1 {
-      font-size: 32px;
-      margin-bottom: 20px;
+    /* مكان الساعة والتاريخ (أعلى اليمين) */
+    #clock-container {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        text-align: right;
     }
 
-    #console {
-      font-family: 'logging', monospace;
-      font-size: 18px;
-      text-align: left;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 20px;
-      border-radius: 10px;
-      white-space: pre-wrap;
-      height: 300px;
-      overflow-y: auto;
+    /* اسمك تحت (أسفل اليمين) */
+    #my-name {
+        position: absolute;
+        bottom: 20px;
+        right: 30px;
+        font-size: 28px;
     }
-    /* تأثير النص المضيء */
-.neon-text {
-    color: white !important;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff;
-    font-weight: bold;
-}
 
-/* الساعة والتاريخ */
-#clock-container {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    text-align: right;
-}
+    /* شريط العداد المتطور (أسفل المنتصف) */
+    #progress-wrapper {
+        position: absolute;
+        bottom: 100px;
+        width: 70%;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    #progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, #fff, #b0b0b0);
+        box-shadow: 0 0 15px #fff;
+        border-radius: 20px;
+        transition: width 0.4s ease;
+    }
 
-/* اسمك تحت (العقيلي) */
-#my-name {
-    position: absolute;
-    bottom: 20px;
-    right: 30px;
-    font-size: 24px;
-}
-
-/* شريط العداد المتطور */
-#progress-wrapper {
-    position: absolute;
-    bottom: 80px;
-    width: 60%;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    overflow: hidden;
-}
-#progress-bar {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, #fff, #e0e0e0);
-    box-shadow: 0 0 15px #fff;
-    transition: width 0.3s ease;
-}
-  </style>
-</head>
-<body>
-  <div id="clock-container" class="neon-text">
-    <div id="clock">00:00:00</div>
-    <div id="date">Date</div>
-</div>
-
-<div id="progress-wrapper">
-    <div id="progress-bar"></div>
-</div>
-
-<div id="my-name" class="neon-text">العقيلي</div>
+    /* تنظيف مربع التنبيهات الأصلي وجعله شفافاً */
+    #msgs, #log, .container {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+</style>
   <script>
     if (window.applicationCache.status === 0) {
       window.location.replace("cache.html");
@@ -166,14 +116,34 @@ function showNotify(msg) {
     document.body.appendChild(notify);
     setTimeout(() => notify.remove(), 3000);
 }
-  </script>
+<script>
+    // تشغيل الساعة الرقمية والتاريخ
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString();
+        document.getElementById('date').innerText = now.toLocaleDateString('ar-EG');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-  <div class="card">
-    <h1>PSFree - Lapse Exploit for Firmware 9.00</h1>
-    <pre id="console"></pre>
-  </div>
+    // لجعل العداد يتحرك تلقائياً مع الثغرة
+    // إذا أردت تجربة العداد الآن يدوياً، أضف هذا السطر:
+    // setProgress(50); // سيجعل الشريط يصل للمنتصف
 
-  <script src="payload.js"></script>
-  <script type="module" src="./alert.mjs"></script>
+    function setProgress(percent) {
+        let bar = document.getElementById('progress-bar');
+        if(bar) bar.style.width = percent + '%';
+    }
+</script>
 </body>
+  <div id="clock-container" class="neon-text">
+    <div id="clock" style="font-size: 35px;">00:00:00</div>
+    <div id="date" style="font-size: 18px;">Date</div>
+</div>
+
+<div id="progress-wrapper">
+    <div id="progress-bar"></div>
+</div>
+
+<div id="my-name" class="neon-text">العقيلي</div>
 </html>
