@@ -2,22 +2,50 @@
 <head>
     <style>
         body {
+            /* حل مشكلة الصورة المتداخلة - تمدد كامل بدون تكرار */
             background: #000 url('qq.png') no-repeat center center fixed !important;
-            background-size: 100% 100% !important; /* هذا اللي بيصلح شكل الصورة */
-            color: #00ff41; font-family: monospace; text-align: center; margin: 0;
+            background-size: 100% 100% !important; 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden; 
+            height: 100vh;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .info { position: relative; top: 45%; font-size: 25px; text-shadow: 0 0 10px #00ff41; }
+
+        #msgs { 
+            /* النص العايم: أبيض مضيء، عريض جداً، وبدون خلفية */
+            color: #ffffff;
+            font-size: 45px; 
+            font-weight: 900; 
+            text-shadow: 0 0 20px #ffffff, 0 0 40px rgba(255, 255, 255, 0.6); 
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 3px;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
-    <div id="msgs" class="info">Installing Offline Cache...</div>
+
+    <div id="msgs">INITIALIZING...</div>
+
     <script>
-        window.applicationCache.onprogress = function(e){
+        function DLProgress(e) {
             var Percent = Math.round(e.loaded / e.total * 100);
-            document.getElementById("msgs").innerHTML = "Installing Offline: " + Percent + "%";
-        };
-        window.applicationCache.oncached = function(){ location.replace("index.html"); };
-        window.applicationCache.onupdateready = function(){ location.replace("index.html"); };
+            document.getElementById("msgs").innerHTML = "INSTALLING CACHE: " + Percent + "%";
+        }
+
+        function DisplayCacheProgress() {
+            document.getElementById("msgs").innerHTML = "OFFLINE READY!";
+            setTimeout(function(){ location.replace("index.html"); }, 2000);
+        }
+
+        window.applicationCache.addEventListener("progress", DLProgress, false);
+        window.applicationCache.oncached = function(e){ DisplayCacheProgress(); };
+        window.applicationCache.onupdateready = function(e){ DisplayCacheProgress(); };
     </script>
 </body>
 </html>
