@@ -109,27 +109,37 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     z-index: 9999;
     transition: all 0.5s ease;
 }
-
-/* هيدر المعلومات (الاسم والوقت) */
+/* التعديل على الهيدر ليكون في المنتصف */
 .log-status-bar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    flex-direction: column; /* لترتيب العناصر عمودياً */
+    align-items: center;    /* توسيط العناصر أفقياً */
+    border-bottom: 1px solid rgba(0, 255, 65, 0.3); /* خط سفلي أخضر باهت */
     margin-bottom: 12px;
-    padding-bottom: 8px;
+    padding-bottom: 10px;
 }
 
 .operator-info {
     font-weight: bold;
-    color: #00ff41; /* لون أخضر للثغرة */
-    text-shadow: 0 0 5px #00ff41;
+    color: #00ff41; 
+    font-size: 16px; /* تكبير الخط قليلاً */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    /* تأثير التوهج الأخضر */
+    text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41, 0 0 20px rgba(0, 255, 65, 0.5);
+    margin-bottom: 5px;
+    animation: text-pulse 2s infinite alternate; /* حركة نبض التوهج */
+}
+
+@keyframes text-pulse {
+    from { filter: brightness(1); }
+    to { filter: brightness(1.5); }
 }
 
 #live-clock {
-    color: #fff;
-    font-weight: bold;
-    text-shadow: 0 0 10px rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 12px;
+    font-weight: normal;
 }
 
 /* تنسيق الرسائل التي تظهر من الثغرة */
@@ -152,13 +162,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <div id="log">
     <div class="log-status-bar">
-        <span class="operator-info">SYSTEM_ACCESS: ON</span>
-        <span id="live-clock">00:00:00</span>
+        <span class="operator-info">EXPLOIT SYSTEM ACTIVE</span>
+        
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <span id="live-clock">00:00:00</span>
+            <span style="font-size: 10px; color: rgba(255,255,255,0.4);" id="live-date">2026/02/13</span>
+        </div>
     </div>
-    <div style="font-size: 10px; color: rgba(255,255,255,0.5); margin-bottom: 10px;" id="live-date">2026/02/13</div>
     
     </div>
-
 <script>
 function updateSystemTime() {
     const now = new Date();
